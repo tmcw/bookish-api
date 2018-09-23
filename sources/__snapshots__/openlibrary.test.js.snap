@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OpenLibrary 1`] = `
+Object {
+  "alibris_id": Array [
+    "9780812993547",
+  ],
+  "amazon": Array [
+    "0812993543",
+  ],
+  "goodreads": Array [
+    "25489625",
+  ],
+  "isbn10": Array [
+    "0812993543",
+  ],
+  "isbn13": Array [
+    "9780812993547",
+  ],
+  "lccn": Array [
+    "2015008120",
+  ],
+  "oclc": Array [
+    "923007023",
+  ],
+  "openlibrary": Array [
+    "OL25773328M",
+  ],
+}
+`;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WorldCat 1`] = `
+Object {
+  "isbn10": Array [
+    "0812993543",
+  ],
+  "isbn13": Array [
+    "9780812993547",
+  ],
+  "oclc": undefined,
+}
+`;
