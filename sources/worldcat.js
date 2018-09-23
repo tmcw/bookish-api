@@ -1,37 +1,41 @@
 const wae = require("web-auto-extractor").default;
 const got = require("got");
-const _ = require("lodash");
+
+function get(obj, path) {
+  for (let p of path) obj = obj && obj[p];
+  return obj;
+}
 
 // TODO: handle 10 vs 13
 class WorldCat {
   constructor(ctx, base = "https://www.worldcat.org") {
     this.base = base;
-    this.ctx = ctx;
-  }
-  async get(type, id) {
-    this.ctx.log("worldcat/request");
-    const before = Date.now();
-    const { body } = await got(`${this.base}/${type}/${id}`);
-    const microdata = wae().parse(body);
-    this.ctx.log(`worldcat/request in ${Date.now() - before}ms`);
-    // TODO: how else could this data be shaped?
-    return {
-      isbn: _.property(["rdfa", "ProductModel", 0, "schema:isbn"])(
-        microdata
-      ).filter(id => id.length == 10),
-      isbn13: _.property(["rdfa", "ProductModel", 0, "schema:isbn"])(
-        microdata
-      ).filter(id => id.length == 13),
-      oclc: _.property(["rdfa", "CreativeWork", 0, "library:oclcnum"])(
-        microdata
-      )
-    };
+    this.ctx = ctx.prefix("worldcat");
   }
   async OCLC(oclc) {
-    return await this.get("oclc", oclc);
+    this.ctx.time("request");
+    const url = `http://experiment.worldcat.org/oclc/${oclc}.jsonld`;
+    this.ctx.log(`url=${url}`);
+    const { body } = await got(url, { json: true });
+    this.ctx.timeEnd(`request`);
+    const isbn = body["@graph"].find(o => o["@type"] === "schema:ProductModel");
+    if (isbn) {
+      return {
+        isbn: isbn.isbn
+      };
+    }
   }
-  async ISBN(isbn) {
-    return await this.get("isbn", isbn);
+  async ISBN(id) {
+    this.ctx.time("request");
+    const url = `${this.base}/isbn/${id}`;
+    this.ctx.log(`url=${url}`);
+    const { body } = await got(url);
+    const microdata = wae().parse(body);
+    this.ctx.timeEnd(`request`);
+    return {
+      isbn: get(microdata, ["rdfa", "ProductModel", 0, "schema:isbn"]),
+      oclc: get(microdata, ["rdfa", "CreativeWork", 0, "library:oclcnum"])
+    };
   }
 }
 
