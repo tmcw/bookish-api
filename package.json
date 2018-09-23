@@ -8,7 +8,7 @@
   "scripts": {
     "start": "micro",
     "dev": "micro-dev",
-    "test": "jest"
+    "test": "tap */**.test.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
@@ -19,7 +19,7 @@
     "web-auto-extractor": "^1.0.17"
   },
   "devDependencies": {
-    "jest": "^23.6.0",
-    "test-listen": "^1.1.0"
+    "prettier": "^1.14.3",
+    "tap": "^12.0.1"
   }
 }

@@ -1,7 +1,8 @@
-var guess = require('./guess');
+const test = require("tap").test;
+const guess = require("./guess");
 
-test('simple cases', () => {
-  expect(guess('OL44998W')).toEqual('OLID')
-  expect(guess('9780062368751')).toEqual('ISBN')
-  expect(guess('0349141924')).toEqual('ISBN');
+test("simple cases", t => {
+  t.equal(guess("OL44998W"), "OLID");
+  t.equal(guess("9780062368751"), "ISBN");
+  t.equal(guess("0349141924"), "ISBN");
 });
