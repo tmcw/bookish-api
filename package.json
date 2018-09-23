@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "micro",
-    "dev": "micro-dev",
+    "dev": "micro-dev -p 3111",
     "test": "tap */**.test.js"
   },
   "dependencies": {

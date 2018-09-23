@@ -30,7 +30,13 @@ class OpenLibrary {
       const {
         identifiers: { isbn_13, isbn_10, lccn, oclc, openlibrary }
       } = body[`${type}:${val}`];
-      return { isbn13: isbn_13, isbn: isbn_10, lccn, oclc, openlibrary };
+
+      return {
+        isbn: [].concat(isbn_13).concat(isbn_10),
+        lccn,
+        oclc,
+        openlibrary
+      };
     } catch (e) {
       this.ctx.log(`ERROR`);
       return null;

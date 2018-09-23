@@ -1,38 +1,9 @@
 const rateLimit = require("micro-ratelimit");
 const { parse } = require("url");
 const { parse: parseQuery } = require("querystring");
-const { guess, collapseResults, methods } = require("./api");
-
-class Context {
-  constructor(messages = [], prefix = "") {
-    this.messages = messages;
-    this.timers = new Map();
-    this.pfx = prefix;
-  }
-  prefix(pfx) {
-    return new Context(this.messages, pfx);
-  }
-  log(msg) {
-    this.messages.push(`${new Date().toISOString()} ${this.pfx} ${msg}`);
-  }
-  time(msg) {
-    this.timers.set(msg, Date.now());
-  }
-  timeEnd(msg) {
-    const before = this.timers.get(msg);
-    if (!before) {
-      console.error(`Timer not found for ${msg}`);
-    }
-    this.log(`${msg} (${Date.now() - before}ms)`);
-    this.timers.delete(msg);
-  }
-  getMessages() {
-    if (this.timers.size) {
-      console.error(`Stray timers detected: ${Array.from(timers.keys())}`);
-    }
-    return this.messages;
-  }
-}
+const { guess, collapseResults, methods } = require("./api.js");
+const Context = require("./context.js");
+const makeSources = require("./sources/index.js");
 
 async function handler(req) {
   if (req.url === "/") {
@@ -40,16 +11,19 @@ async function handler(req) {
   }
 
   const { pathname, query } = parse(req.url);
+  const { id, type } = parseQuery(query);
 
   if (pathname === "/search") {
     const ctx = new Context();
-    const { id, type } = parseQuery(query);
-    ctx.log(`START id=${id} type=${type}`);
+    const sources = makeSources(ctx);
     const method = methods.find(method => method.id === type);
     if (method) {
+      ctx.time(`overall id=${id} type=${type}`);
+      const results = await method.resolve(ctx, id, sources);
+      ctx.timeEnd(`overall id=${id} type=${type}`);
       return {
         messages: ctx.getMessages(),
-        results: collapseResults(await method.resolve(ctx, id))
+        results: collapseResults(results)
       };
     }
     if (type === "guess") {
