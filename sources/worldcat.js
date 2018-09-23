@@ -9,7 +9,7 @@ class WorldCat {
     this.ctx = ctx;
   }
   async get(type, id) {
-    this.ctx.log('worldcat/request');
+    this.ctx.log("worldcat/request");
     const before = Date.now();
     const { body } = await got(`${this.base}/${type}/${id}`);
     const microdata = wae().parse(body);

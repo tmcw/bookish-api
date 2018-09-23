@@ -24,12 +24,10 @@ class GoodReads {
     const res = await getXML(url);
     this.ctx.log(`goodreads/request in ${Date.now() - before}ms`);
     const ids = {};
-    ["isbn", "isbn13", "asin"].forEach(
-      (type) => {
-        const value = res(`GoodreadsResponse > book > ${type}`).text();
-        if (value) ids[type] = [value];
-      }
-    );
+    ["isbn", "isbn13", "asin"].forEach(type => {
+      const value = res(`GoodreadsResponse > book > ${type}`).text();
+      if (value) ids[type] = [value];
+    });
     return ids;
   }
 }

@@ -4,7 +4,8 @@ const _ = require("lodash");
 // https://openlibrary.org/dev/docs/api/books
 // TODO: handle 10 vs 13
 class OpenLibrary {
-  constructor(ctx, 
+  constructor(
+    ctx,
     base = "https://openlibrary.org/api/books?format=json&jscmd=data&bibkeys="
   ) {
     this.ctx = ctx;
