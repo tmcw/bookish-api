@@ -25,9 +25,13 @@ class WorldCat {
     }
     this.ctx.timeEnd(`request`);
     const isbn = body["@graph"].find(o => o["@type"] === "schema:ProductModel");
+    const book = body["@graph"].find(o =>
+      [].concat(o["@type"]).includes("schema:CreativeWork")
+    );
     if (isbn) {
       return {
-        isbn: isbn.isbn
+        isbn: isbn.isbn,
+        permalinks: [isbn["@id"], book["@id"]]
       };
     }
   }
@@ -44,9 +48,12 @@ class WorldCat {
     }
     const microdata = wae().parse(body);
     this.ctx.timeEnd(`request`);
+    const isbn = get(microdata, ["rdfa", "ProductModel", 0, "schema:isbn"]);
+    const oclc = get(microdata, ["rdfa", "CreativeWork", 0, "library:oclcnum"]);
     return {
-      isbn: get(microdata, ["rdfa", "ProductModel", 0, "schema:isbn"]),
-      oclc: get(microdata, ["rdfa", "CreativeWork", 0, "library:oclcnum"])
+      isbn,
+      oclc,
+      permalinks: [url, `https://worldcat.org/oclc/${oclc}`]
     };
   }
 }

@@ -18,7 +18,8 @@ class GoodReads {
       );
       this.ctx.timeEnd(`request`);
       return {
-        goodreads: [body]
+        goodreads: [body],
+        permalinks: [`https://goodreads.com/book/show/${body}`]
       };
     } catch (e) {
       this.ctx.log("NOT FOUND");
