@@ -16,7 +16,13 @@ class WorldCat {
     this.ctx.time("request");
     const url = `http://experiment.worldcat.org/oclc/${oclc}.jsonld`;
     this.ctx.log(`url=${url}`);
-    const { body } = await got(url, { json: true });
+    let body;
+    try {
+      ({ body } = await got(url, { json: true }));
+    } catch (e) {
+      this.ctx.log(`NOT FOUND`);
+      return undefined;
+    }
     this.ctx.timeEnd(`request`);
     const isbn = body["@graph"].find(o => o["@type"] === "schema:ProductModel");
     if (isbn) {
@@ -29,7 +35,13 @@ class WorldCat {
     this.ctx.time("request");
     const url = `${this.base}/isbn/${id}`;
     this.ctx.log(`url=${url}`);
-    const { body } = await got(url);
+    let body;
+    try {
+      ({ body } = await got(url));
+    } catch (e) {
+      this.ctx.log(`NOT FOUND`);
+      return undefined;
+    }
     const microdata = wae().parse(body);
     this.ctx.timeEnd(`request`);
     return {

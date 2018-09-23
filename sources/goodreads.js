@@ -11,18 +11,25 @@ class GoodReads {
     this.base = base;
   }
   async ISBN(isbn) {
-    const { body } = await got(
-      `${this.base}/isbn_to_id/${isbn}?key=${GOODREADS_KEY}`
-    );
-    return {
-      goodreads: [body]
-    };
+    try {
+      this.ctx.time(`request`);
+      const { body } = await got(
+        `${this.base}/isbn_to_id/${isbn}?key=${GOODREADS_KEY}`
+      );
+      this.ctx.timeEnd(`request`);
+      return {
+        goodreads: [body]
+      };
+    } catch (e) {
+      this.ctx.log("NOT FOUND");
+    }
   }
   async GoodReads(goodreads) {
     const url = `${this.base}/show/${goodreads}.json?key=${GOODREADS_KEY}`;
-    const before = Date.now();
+    this.ctx.time(`request`);
+    this.ctx.log(`url=${url}`);
     const res = await getXML(url);
-    this.ctx.log(`goodreads/request in ${Date.now() - before}ms`);
+    this.ctx.timeEnd(`request`);
     const ids = {};
     ["isbn", "isbn13", "asin"].forEach(type => {
       const value = res(`GoodreadsResponse > book > ${type}`).text();
