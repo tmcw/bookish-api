@@ -7,7 +7,7 @@ const getXML = async url =>
 // https://www.goodreads.com/api/index#book.isbn_to_id
 class GoodReads {
   constructor(ctx, base = "https://www.goodreads.com/book") {
-    this.ctx = ctx;
+    this.ctx = ctx.prefix("goodreads");
     this.base = base;
   }
   async ISBN(isbn) {

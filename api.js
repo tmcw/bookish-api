@@ -15,7 +15,6 @@ const methods = [
     name: "International Standard Book Number",
     example: "0140098682",
     resolve: async (context, id) => {
-      context.log('starting isbn search using goodreads, openlibrary, and worldcat sources');
       const goodReads = new GoodReads(context);
       const openLibrary = new OpenLibrary(context);
       const worldCat = new WorldCat(context);
@@ -37,7 +36,8 @@ const methods = [
     url: id => `http://www.worldcat.org/oclc/${id}?tab=details`,
     example: "956478923",
     resolve: async (context, id) => {
-      context.log('starting oclc search');
+      const openLibrary = new OpenLibrary(context);
+      const worldCat = new WorldCat(context);
       return {
         openlibrary: await openLibrary.OCLC(id),
         worldcat: await worldCat.OCLC(id)
@@ -50,7 +50,6 @@ const methods = [
     url: id => `https://openlibrary.org/books/${id}`,
     example: "OL794799M",
     resolve: async (context, id) => {
-      context.log('starting olid search');
       return {
         openlibrary: await openLibrary.OLID(id)
       };
@@ -62,7 +61,6 @@ const methods = [
     url: id => `http://lccn.loc.gov/${id}`,
     example: "95030619",
     resolve: async (context, id) => {
-      context.log('starting lccn search');
       return {
         openlibrary: await openLibrary.LCCN(id)
       };
@@ -74,7 +72,6 @@ const methods = [
     url: id => `https://www.goodreads.com/book/show/${id}`,
     example: "544063",
     resolve: async (context, id) => {
-      context.log('starting goodreads search');
       let g = await goodReads.GoodReads(id);
       if (g.isbn && g.isbn.length) {
         let isbn = g.isbn[0];

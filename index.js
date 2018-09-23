@@ -4,13 +4,33 @@ const { parse: parseQuery } = require("querystring");
 const { guess, collapseResults, methods } = require("./api");
 
 class Context {
-  constructor() {
-    this.messages = [];
+  constructor(messages = [], prefix = "") {
+    this.messages = messages;
+    this.timers = new Map();
+    this.pfx = prefix;
+  }
+  prefix(pfx) {
+    return new Context(this.messages, pfx);
   }
   log(msg) {
-    let formatted = `${new Date().toISOString()} ${msg}`;
-    console.log(formatted);
-    this.messages.push(formatted);
+    this.messages.push(`${new Date().toISOString()} ${this.pfx} ${msg}`);
+  }
+  time(msg) {
+    this.timers.set(msg, Date.now());
+  }
+  timeEnd(msg) {
+    const before = this.timers.get(msg);
+    if (!before) {
+      console.error(`Timer not found for ${msg}`);
+    }
+    this.log(`${msg} (${Date.now() - before}ms)`);
+    this.timers.delete(msg);
+  }
+  getMessages() {
+    if (this.timers.size) {
+      console.error(`Stray timers detected: ${Array.from(timers.keys())}`);
+    }
+    return this.messages;
   }
 }
 
@@ -24,11 +44,11 @@ async function handler(req) {
   if (pathname === "/search") {
     const ctx = new Context();
     const { id, type } = parseQuery(query);
-    console.log(`search id=${id} type=${type}`);
+    ctx.log(`START id=${id} type=${type}`);
     const method = methods.find(method => method.id === type);
     if (method) {
       return {
-        messages: ctx.messages,
+        messages: ctx.getMessages(),
         results: collapseResults(await method.resolve(ctx, id))
       };
     }
