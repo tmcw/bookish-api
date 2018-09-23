@@ -4,18 +4,19 @@ const _ = require("lodash");
 // https://openlibrary.org/dev/docs/api/books
 // TODO: handle 10 vs 13
 class OpenLibrary {
-  constructor(
+  constructor(ctx, 
     base = "https://openlibrary.org/api/books?format=json&jscmd=data&bibkeys="
   ) {
+    this.ctx = ctx;
     this.base = base;
   }
   async getType(type, val) {
     try {
       const url = `${this.base}${type}:${val}`;
-      console.log(`openlibrary/request url=${url}`);
-      console.time("openlibrary/request");
+      let before = Date.now();
+      this.ctx.log(`url=${url}`);
       let res = (await got(url, { json: true, timeout: 2000 })).body;
-      console.timeEnd("openlibrary/request");
+      this.ctx.log(`url=${url} ${Date.now() - before}ms`);
       let identifiers = _.property([`${type}:${val}`, "identifiers"])(res);
       identifiers.isbn = identifiers.isbn_10;
       delete identifiers.isbn_10;
@@ -23,6 +24,8 @@ class OpenLibrary {
       delete identifiers.isbn_13;
       return identifiers;
     } catch (e) {
+      console.log(e);
+      this.ctx.log(`NOT FOUND on OpenLibrary (request code ${e.status})`);
       return null;
     }
   }

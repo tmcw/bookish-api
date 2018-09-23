@@ -4,16 +4,16 @@ const _ = require("lodash");
 
 // TODO: handle 10 vs 13
 class WorldCat {
-  constructor(base = "https://www.worldcat.org") {
+  constructor(ctx, base = "https://www.worldcat.org") {
     this.base = base;
+    this.ctx = ctx;
   }
   async get(type, id) {
-    console.log('worldcat/request');
-    console.time('worldcat/request');
+    this.ctx.log('worldcat/request');
+    const before = Date.now();
     const { body } = await got(`${this.base}/${type}/${id}`);
     const microdata = wae().parse(body);
-    console.timeEnd('worldcat/request');
-    console.log('worldcat/parse');
+    this.ctx.log(`worldcat/request in ${Date.now() - before}ms`);
     // TODO: how else could this data be shaped?
     return {
       isbn: _.property(["rdfa", "ProductModel", 0, "schema:isbn"])(
