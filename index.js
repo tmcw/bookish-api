@@ -21,9 +21,11 @@ async function handler(req) {
       ctx.time(`overall id=${id} type=${type}`);
       const results = await method.resolve(ctx, id, sources);
       ctx.timeEnd(`overall id=${id} type=${type}`);
+      const { ids, permalinks } = collapseResults(results);
       return {
         messages: ctx.getMessages(),
-        results: collapseResults(results)
+        results: ids,
+        permalinks
       };
     }
     if (type === "guess") {

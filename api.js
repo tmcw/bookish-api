@@ -84,7 +84,8 @@ const methods = [
 ];
 
 function collapseResults(results) {
-  let ids = {};
+  let ids = {},
+    permalinks;
   for (let source in results) {
     for (let id in results[source]) {
       ids[id] = (ids[id] || []).concat(results[source][id]);
@@ -97,7 +98,8 @@ function collapseResults(results) {
   const isbn = ids.isbn || [];
   ids.isbn = isbn.filter(id => id.length === 10);
   ids.isbn13 = isbn.filter(id => id.length === 13);
-  return ids;
+  ({ permalinks, ...ids } = ids);
+  return { permalinks, ids };
 }
 
 module.exports.guess = guess;

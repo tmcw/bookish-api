@@ -35,7 +35,8 @@ class OpenLibrary {
         isbn: [].concat(isbn_13).concat(isbn_10),
         lccn,
         oclc,
-        openlibrary
+        openlibrary,
+        permalinks: [`https://openlibrary.org/books/${openlibrary}`]
       };
     } catch (e) {
       this.ctx.log(`ERROR`);
