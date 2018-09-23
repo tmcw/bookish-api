@@ -6,7 +6,8 @@ const getXML = async url =>
 
 // https://www.goodreads.com/api/index#book.isbn_to_id
 class GoodReads {
-  constructor(base = "https://www.goodreads.com/book") {
+  constructor(ctx, base = "https://www.goodreads.com/book") {
+    this.ctx = ctx;
     this.base = base;
   }
   async ISBN(isbn) {
@@ -19,7 +20,9 @@ class GoodReads {
   }
   async GoodReads(goodreads) {
     const url = `${this.base}/show/${goodreads}.json?key=${GOODREADS_KEY}`;
+    const before = Date.now();
     const res = await getXML(url);
+    this.ctx.log(`goodreads/request in ${Date.now() - before}ms`);
     const ids = {};
     ["isbn", "isbn13", "asin"].forEach(
       (type) => {
