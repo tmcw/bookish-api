@@ -16,7 +16,7 @@ class WorldCat {
     console.log('worldcat/parse');
     // TODO: how else could this data be shaped?
     return {
-      isbn10: _.property(["rdfa", "ProductModel", 0, "schema:isbn"])(
+      isbn: _.property(["rdfa", "ProductModel", 0, "schema:isbn"])(
         microdata
       ).filter(id => id.length == 10),
       isbn13: _.property(["rdfa", "ProductModel", 0, "schema:isbn"])(

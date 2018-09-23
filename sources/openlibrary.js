@@ -17,7 +17,7 @@ class OpenLibrary {
       let res = (await got(url, { json: true, timeout: 2000 })).body;
       console.timeEnd("openlibrary/request");
       let identifiers = _.property([`${type}:${val}`, "identifiers"])(res);
-      identifiers.isbn10 = identifiers.isbn_10;
+      identifiers.isbn = identifiers.isbn_10;
       delete identifiers.isbn_10;
       identifiers.isbn13 = identifiers.isbn_13;
       delete identifiers.isbn_13;

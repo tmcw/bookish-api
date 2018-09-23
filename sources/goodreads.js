@@ -21,10 +21,10 @@ class GoodReads {
     const url = `${this.base}/show/${goodreads}.json?key=${GOODREADS_KEY}`;
     const res = await getXML(url);
     const ids = {};
-    [["isbn", "isbn10"], ["isbn13", "isbn13"], ["asin", "asin"]].forEach(
-      ([type, alias]) => {
+    ["isbn", "isbn13", "asin"].forEach(
+      (type) => {
         const value = res(`GoodreadsResponse > book > ${type}`).text();
-        if (value) ids[alias] = [value];
+        if (value) ids[type] = [value];
       }
     );
     return ids;
