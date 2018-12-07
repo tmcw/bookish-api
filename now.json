@@ -1,10 +1,14 @@
 {
   "name": "bookish-api",
+  "version": 2,
   "alias": "api.bookish.tech",
   "scale": {
     "sfo1": {
       "min": 1,
       "max": "auto"
     }
-  }
+  },
+  "builds": [
+    { "src": "search/index.js", "use": "@now/node" }
+  ]
 }
