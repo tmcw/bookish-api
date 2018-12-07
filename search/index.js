@@ -1,9 +1,9 @@
 const rateLimit = require("micro-ratelimit");
 const { parse } = require("url");
 const { parse: parseQuery } = require("querystring");
-const { guess, collapseResults, methods } = require("./api.js");
-const Context = require("./context.js");
-const makeSources = require("./sources/index.js");
+const { guess, collapseResults, methods } = require("../api.js");
+const Context = require("../context.js");
+const makeSources = require("../sources/index.js");
 
 async function handler(req) {
   const { pathname, query } = parse(req.url);
