@@ -8,6 +8,9 @@ const makeSources = require("../sources/index.js");
 async function handler(req) {
   const { pathname, query } = parse(req.url);
   const { id, type } = parseQuery(query);
+  if (!id || !type) {
+    throw new Error("Bad request");
+  }
   const ctx = new Context();
   const sources = makeSources(ctx);
   const method = methods.find(method => method.id === type);
@@ -32,5 +35,5 @@ module.exports = rateLimit(
   handler
 );
 
-module.exports.handler = handler;
+module.exports = handler;
 module.exports.Context = Context;
