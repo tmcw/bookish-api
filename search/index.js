@@ -9,7 +9,7 @@ async function handler(req) {
   const { pathname, query } = parse(req.url);
   const { id, type } = parseQuery(query);
   if (!id || !type) {
-    throw new Error("Bad request");
+    return { error: "Bad request" };
   }
   const ctx = new Context();
   const sources = makeSources(ctx);
@@ -35,5 +35,5 @@ module.exports = rateLimit(
   handler
 );
 
-module.exports = handler;
+module.exports.handler = handler;
 module.exports.Context = Context;
