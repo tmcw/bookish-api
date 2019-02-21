@@ -3,6 +3,9 @@
   "version": 2,
   "alias": "api.bookish.tech",
   "builds": [
-    { "src": "search/index.js", "use": "@now/node" }
+    { "src": "search/index.js", "use": "now-micro" }
+  ],
+  "routes": [
+    { "src": "/search(.*)", "dest": "/search/index.js" }
   ]
 }
