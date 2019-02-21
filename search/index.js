@@ -1,3 +1,4 @@
+const rateLimit = require("micro-ratelimit");
 const { parse } = require("url");
 const { parse: parseQuery } = require("querystring");
 const { guess, collapseResults, methods } = require("../api.js");
@@ -29,4 +30,10 @@ async function handler(req) {
   }
 }
 
-module.exports = handler;
+module.exports = rateLimit(
+  { window: 10000, limit: 100, headers: true },
+  handler
+);
+
+module.exports.handler = handler;
+module.exports.Context = Context;
