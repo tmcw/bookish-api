@@ -99,7 +99,7 @@ function collapseResults(results) {
   ids.isbn = isbn.filter(id => id.length === 10);
   ids.isbn13 = isbn.filter(id => id.length === 13);
   ({ permalinks, ...ids } = ids);
-  return { permalinks, ids };
+  return { permalinks: permalinks || [], ids };
 }
 
 module.exports.guess = guess;
