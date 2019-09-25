@@ -48,10 +48,12 @@ class WorldCat {
     }
     const microdata = wae().parse(body);
     this.ctx.timeEnd(`request`);
+    const title = get(microdata, ["rdfa", "Book", 0, "schema:name"]);
     const isbn = get(microdata, ["rdfa", "ProductModel", 0, "schema:isbn"]);
     const oclc = get(microdata, ["rdfa", "CreativeWork", 0, "library:oclcnum"]);
     return {
       isbn,
+      title,
       oclc,
       permalinks: [url, `https://worldcat.org/oclc/${oclc}`]
     };

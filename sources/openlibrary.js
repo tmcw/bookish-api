@@ -28,12 +28,16 @@ class OpenLibrary {
         return null;
       }
       const {
-        identifiers: { isbn_13, isbn_10, lccn, oclc, openlibrary }
+        identifiers: { isbn_13, isbn_10, lccn, oclc, openlibrary },
+        title,
+        authors
       } = body[`${type}:${val}`];
 
       return {
         isbn: [].concat(isbn_13).concat(isbn_10),
         lccn,
+        title,
+        authors: authors.map(a => a.name),
         oclc,
         openlibrary,
         permalinks: [`https://openlibrary.org/books/${openlibrary}`]

@@ -98,8 +98,9 @@ function collapseResults(results) {
   const isbn = ids.isbn || [];
   ids.isbn = isbn.filter(id => id.length === 10);
   ids.isbn13 = isbn.filter(id => id.length === 13);
+  ids.title = Array.from(new Set(ids.title));
   ({ permalinks, ...ids } = ids);
-  return { permalinks, ids };
+  return { permalinks: permalinks || [], ids };
 }
 
 module.exports.guess = guess;
