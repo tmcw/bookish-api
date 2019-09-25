@@ -19,9 +19,11 @@ class GoodReads {
       this.ctx.timeEnd(`request`);
       return {
         goodreads: [body],
-        permalinks: [`https://goodreads.com/book/show/${body}`]
+        permalinks: [`https://goodreads.com/book/show/${body}`],
+        ...(await this.GoodReads(body))
       };
     } catch (e) {
+      console.log(e);
       this.ctx.log("NOT FOUND");
     }
   }
@@ -36,6 +38,10 @@ class GoodReads {
       const value = res(`GoodreadsResponse > book > ${type}`).text();
       if (value) ids[type] = [value];
     });
+    ids.title = res(`GoodreadsResponse > book > title`).text();
+    ids.authors = res(`GoodreadsResponse > book > authors > author > name`)
+      .map((i, el) => cheerio(el).text())
+      .get();
     return ids;
   }
 }
