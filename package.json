@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "prettier": "^1.14.3",
-    "tap": "^14.10.6"
+    "tap": "^14.10.7"
   }
 }
