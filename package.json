@@ -19,7 +19,7 @@
     "web-auto-extractor": "^1.0.17"
   },
   "devDependencies": {
-    "prettier": "^1.14.3",
+    "prettier": "^2.0.4",
     "tap": "^14.10.6"
   }
 }
