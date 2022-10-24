@@ -1,0 +1,25 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "13:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: tap
+    versions:
+    - 14.11.0
+    - 15.0.0
+    - 15.0.1
+    - 15.0.2
+    - 15.0.4
+  - dependency-name: cheerio
+    versions:
+    - 1.0.0-rc.5
+  - dependency-name: got
+    versions:
+    - 11.8.1
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
