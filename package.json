@@ -13,7 +13,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "got": "^10.6.0",
-    "micro": "^9.3.3",
+    "micro": "^10.0.1",
     "micro-dev": "^3.0.0",
     "micro-ratelimit": "^0.4.0",
     "web-auto-extractor": "^1.0.17"
