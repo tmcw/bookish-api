@@ -1,10 +1,10 @@
-const cheerio = require("cheerio");
+import cheerio from "cheerio";
 const GOODREADS_KEY = "H0A4fmIW7WF2btmo1ACpw";
-const getXML = async url =>
-  cheerio.load(await fetch(url).then(r => r.text()), { xmlMode: true });
+const getXML = async (url) =>
+  cheerio.load(await fetch(url).then((r) => r.text()), { xmlMode: true });
 
 // https://www.goodreads.com/api/index#book.isbn_to_id
-class GoodReads {
+export default class GoodReads {
   constructor(ctx, base = "https://www.goodreads.com/book") {
     this.ctx = ctx.prefix("goodreads");
     this.base = base;
@@ -13,13 +13,13 @@ class GoodReads {
     try {
       this.ctx.time(`request`);
       const body = await fetch(
-        `${this.base}/isbn_to_id/${isbn}?key=${GOODREADS_KEY}`
-      ).then(r => r.text());
+        `${this.base}/isbn_to_id/${isbn}?key=${GOODREADS_KEY}`,
+      ).then((r) => r.text());
       this.ctx.timeEnd(`request`);
       return {
         goodreads: [body],
         permalinks: [`https://goodreads.com/book/show/${body}`],
-        ...(await this.GoodReads(body))
+        ...(await this.GoodReads(body)),
       };
     } catch (e) {
       console.log(e);
@@ -33,7 +33,7 @@ class GoodReads {
     const res = await getXML(url);
     this.ctx.timeEnd(`request`);
     const ids = {};
-    ["isbn", "isbn13", "asin"].forEach(type => {
+    ["isbn", "isbn13", "asin"].forEach((type) => {
       const value = res(`GoodreadsResponse > book > ${type}`).text();
       if (value) ids[type] = [value];
     });
@@ -44,5 +44,3 @@ class GoodReads {
     return ids;
   }
 }
-
-module.exports = GoodReads;

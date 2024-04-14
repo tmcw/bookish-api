@@ -1,11 +1,11 @@
-const GoodReads = require("./goodreads.js");
-const OpenLibrary = require("./openlibrary.js");
-const WorldCat = require("./worldcat.js");
+import GoodReads from "./goodreads.js";
+import OpenLibrary from "./openlibrary.js";
+import WorldCat from "./worldcat.js";
 
-module.exports = function makeSources(ctx) {
+export default function makeSources(ctx) {
   return {
     goodReads: new GoodReads(ctx),
     openLibrary: new OpenLibrary(ctx),
-    worldCat: new WorldCat(ctx)
+    worldCat: new WorldCat(ctx),
   };
-};
+}
