@@ -1,5 +1,3 @@
-const got = require("got");
-
 // https://openlibrary.org/dev/docs/api/books
 //
 // OpenLibrary, somewhat confusingly, doesn't return a 404 for unknown resources.
@@ -20,7 +18,7 @@ class OpenLibrary {
       let before = Date.now();
       this.ctx.log(`url=${url}`);
       this.ctx.time("request");
-      let { body } = await got(url, { json: true, timeout: 2000 });
+      let body = await fetch(url).then(r => r.json());
       this.ctx.timeEnd("request");
 
       if (!Object.keys(body).length) {

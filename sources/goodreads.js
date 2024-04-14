@@ -1,8 +1,7 @@
-const got = require("got");
 const cheerio = require("cheerio");
 const GOODREADS_KEY = "H0A4fmIW7WF2btmo1ACpw";
 const getXML = async url =>
-  cheerio.load((await got(url, { timeout: 2000 })).body, { xmlMode: true });
+  cheerio.load(await fetch(url).then(r => r.text()), { xmlMode: true });
 
 // https://www.goodreads.com/api/index#book.isbn_to_id
 class GoodReads {
@@ -13,9 +12,9 @@ class GoodReads {
   async ISBN(isbn) {
     try {
       this.ctx.time(`request`);
-      const { body } = await got(
+      const body = await fetch(
         `${this.base}/isbn_to_id/${isbn}?key=${GOODREADS_KEY}`
-      );
+      ).then(r => r.text());
       this.ctx.timeEnd(`request`);
       return {
         goodreads: [body],

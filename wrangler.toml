@@ -1,0 +1,4 @@
+name = "bookish-api"
+main = "src/index.ts"
+compatibility_date = "2024-04-14"
+node_compat = true

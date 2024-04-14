@@ -1,5 +1,4 @@
 const wae = require("web-auto-extractor").default;
-const got = require("got");
 
 function get(obj, path) {
   for (let p of path) obj = obj && obj[p];
@@ -18,7 +17,7 @@ class WorldCat {
     this.ctx.log(`url=${url}`);
     let body;
     try {
-      ({ body } = await got(url, { json: true }));
+      body = await fetch(url).then(r => r.json());
     } catch (e) {
       this.ctx.log(`NOT FOUND`);
       return undefined;
@@ -41,7 +40,7 @@ class WorldCat {
     this.ctx.log(`url=${url}`);
     let body;
     try {
-      ({ body } = await got(url));
+      body = await fetch(url).then(r => r.text());
     } catch (e) {
       this.ctx.log(`NOT FOUND`);
       return undefined;
